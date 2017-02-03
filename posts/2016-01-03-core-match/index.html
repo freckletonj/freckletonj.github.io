@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Core.Match | A Simple Example | growmobily</title>
+
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+        <!------ Bootstrap ----->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <!------ FontAwesome ----->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    
+    <body>
+
+        <div class="banner"></div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                    <div id="content">
+                        <h1>Core.Match | A Simple Example</h1>
+<div class="info">
+    Posted on January  3, 2016
+    
+        by Josh
+    
+</div>
+
+<h1 id="a-slightly-motivating-example">A Slightly Motivating Example</h1>
+<p>If you’ve played around with haskell, or other typed “functional” languages, you’ve probably noticed that “pattern matching” plays a prominent role. While clojure has made a tradeoff on the whole typing debate, we can still pattern match!</p>
+<p>Notice how nice it is to not need to do control flow with <code>(if (= x 1) ...)</code>. Sure <code>cond</code> is great, but <code>match</code> diverges in use cases in more complex problems.</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="bu">defn</span><span class="fu"> fib </span>[x]
+  (match [x]
+    [<span class="dv">1</span>] <span class="dv">1</span>
+    [_] (<span class="kw">*</span> x (fib (<span class="kw">dec</span> x)))))
+
+(fib <span class="dv">3</span>) <span class="co">;; =&gt; 6</span></code></pre></div>
+<h1 id="seriously-thats-the-end-of-the-post">Seriously, that’s the end of the post?</h1>
+<p>Yes. I’ll try to expand this further later!</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

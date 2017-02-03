@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Core.Logic | Functional Patterns in a Logic Language | growmobily</title>
+
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+        <!------ Bootstrap ----->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <!------ FontAwesome ----->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    
+    <body>
+
+        <div class="banner"></div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                    <div id="content">
+                        <h1>Core.Logic | Functional Patterns in a Logic Language</h1>
+<div class="info">
+    Posted on January  3, 2016
+    
+        by Josh
+    
+</div>
+
+<h1 id="purpose">Purpose</h1>
+<p>This isn’t a primer in <code>core.logic</code>, but instead supposed to pique the reader’s interest in the alien world of logic programming.</p>
+<p>To do so, I’ll translate the functions <code>map</code>, <code>filter</code>, and <code>reduce</code> into their relational counterparts.</p>
+<h1 id="a-motivating-example">A Motivating Example</h1>
+<p>Imagine you need to inspect all lists of numbers that simultaneously sum to <code>42</code>, and multiply to <code>152</code>. How many lines of code would that take you to write that?</p>
+<p>Here’s the relational version of the solution, simplified (barely).</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(run* [q]
+  <span class="co">;; find all lists that sum to 42 and multiply to 152</span>
+  (reduceo <span class="kw">+</span> <span class="dv">0</span> q <span class="dv">42</span>)
+  (reduceo <span class="kw">*</span> <span class="dv">1</span> q <span class="dv">152</span>)) 
+  
+  <span class="co">;; =&gt; ([4 38] [38 4] [2 2 38] [2 38 2] [38 2 2])</span></code></pre></div>
+<p>So there are 5 lists that qualify.</p>
+<h1 id="a-crazier-example-quines">A Crazier Example: Quines</h1>
+<p>A quine is a program that, when evaluated, returns it’s own source code. These are tougher than you’d think to find, but they exist in most languages.</p>
+<p>William E. Byrd is a logic <em>machine</em> and wrote an interesting <a href="http://webyrd.net/quines/quines.pdf">paper</a> detailing a program which <em>finds</em> quines, and the more complex twines, and thrines.</p>
+<p>Here’s the entire program for finding all possible (infinite?) quines in a lisp language:</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(run* [q] (eval-expo q '() q))</code></pre></div>
+<p>So, it finds all programs <code>q</code> that when evaluated in the “empty environment” (<code>'()</code>), return <code>q</code>.</p>
+<h1 id="details-for-my-reduceo-example">Details for my <code>reduceo</code> example</h1>
+<p><code>reduce</code> is a useful <em>function</em> for compressing lists down into something.</p>
+<p>ex: <code>(reduce + 0 [1 2 3]) ;; =&gt; 6</code></p>
+<p>A function takes inputs and returns an output.</p>
+<p>A <em>relation</em> however can be viewed as a set of all inputs-output tuples that are related according to some relationship.</p>
+<p>consider: <code>(reduceo + 0 _ 6)</code> (notice <code>reduceo</code> doesn’t return anything, the <code>_</code> is pseudo-syntax of a “hole” to be filled, and the <code>6</code> is just part of the relationship)</p>
+<p>lists that fill the hole and satisfy the relation: <code>([6], [1 5], [1 1 1 1 1 1], [1 2 3], ...)</code></p>
+<p>Wow. And I thought <em>functional</em> practices were declarative. With <code>core.logic</code>, you really just describe your problem and get back answers.</p>
+<p><em>Note:</em></p>
+<p>You may notice that clojure’s stock <code>+</code> is a <em>function</em>, which is incompatible with this relations-based language. My motivating example uses not the function <code>+</code>, but the similar <em>relationship</em> <code>+</code> from <code>clojure.core.logic.fd</code>, which looks kind of like this: <code>(fd/+ a b answer)</code>.</p>
+<h1 id="the-guts">The Guts</h1>
+<p>I think the code is fairly simple to read through if you understand the basics of <code>core.logic</code>, but please let me know if there’s something I need to clarify! You should be able to copy-paste this and play around with it!</p>
+<p>You’ll notice, I wrote functions <code>reducef, mapf, filterf</code>, this is a re-implementation of the core functions, which allowed me to better understand how the relational version needed to be built, and I left them in so that my readership can appreciate the similarities and differences.</p>
+<p><em>disclaimer: I’m a logic noob, so you’ll probably find a lot you’d like to change, point it out and I’ll fix it!</em></p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> clj-scratch.core-logic
+  (<span class="at">:require</span> [clojure.core.logic <span class="at">:refer</span> <span class="at">:all</span>]
+            [clojure.core.logic.fd <span class="at">:as</span> fd]))
+
+<span class="co">;; A couple useful relations for playing around with things ----------</span>
+
+(<span class="bu">defn</span><span class="fu"> inco </span>[x a]
+  (fd/+ <span class="dv">1</span> x a))
+
+(<span class="bu">defn</span><span class="fu"> eveno </span>[n]
+  (fresh [a]
+    (conde
+     [(<span class="kw">==</span> <span class="dv">0</span> n)]
+     [(fd/+ <span class="dv">2</span> a n)
+      (eveno a)])))
+
+
+<span class="co">;; REDUCE ----------</span>
+
+(<span class="bu">defn</span><span class="fu"> reducef </span>[f base coll]
+  (<span class="kw">if</span> (<span class="kw">empty?</span> coll)
+    base
+    (reducef f
+             (f base (<span class="kw">first</span> coll))
+             (<span class="kw">rest</span> coll))))
+
+(reducef <span class="kw">+</span> <span class="dv">0</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>]) <span class="co">;; =&gt; 6</span>
+
+(<span class="bu">defn</span><span class="fu"> reduceo </span>[relo base coll answer]
+  (conde
+   [(emptyo coll) (<span class="kw">==</span> answer base)]
+   [(fresh [new-coll new-base fst]
+      (firsto coll fst)
+      (resto coll new-coll)
+      (relo base fst new-base)
+      (reduceo relo new-base new-coll answer))]))
+
+(run <span class="dv">10</span> [q]
+  (reduceo fd/+ <span class="dv">42</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> q] <span class="dv">52</span>)) <span class="co">;; =&gt; (4)</span>
+(run <span class="dv">10</span> [q]
+  (reduceo fd/+ <span class="dv">42</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>] q))  <span class="co">;; =&gt; (52)</span>
+(run <span class="dv">10</span> [q]
+  (reduceo fd/+ q [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>] <span class="dv">52</span>))  <span class="co">;; =&gt; (42)</span>
+
+<span class="co">;; MAP ----------</span>
+
+(<span class="bu">defn</span><span class="fu"> mapf </span>[f coll]
+  (reducef (<span class="kw">fn</span> [m x] (<span class="kw">conj</span> m (f x))) [] coll))
+
+(mapf <span class="kw">inc</span> [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>]) <span class="co">;; =&gt; [2 3 4]</span>
+
+(<span class="bu">defprotocol</span><span class="fu"> Mapo</span>
+  (mapo-helper [coll relo answer]))
+
+(<span class="kw">extend-protocol</span> Mapo
+  clojure.lang.PersistentVector
+  (mapo-helper [coll relo answer] 
+    (reduceo (<span class="kw">fn</span> [coll x new-coll]
+               (fresh [x2]
+                 (relo x x2)
+                 (conjo coll x2 new-coll)))
+             [] coll answer)))
+
+(<span class="bu">defn</span><span class="fu"> mapo</span>
+  <span class="st">&quot;flips `coll` to first position, so `extend-protocol` can dispatch</span>
+<span class="st">  on it&quot;</span>
+  [relo coll answer]
+  (mapo-helper coll relo answer))
+
+(run <span class="dv">10</span> [q]
+  (mapo inco [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>] q)) <span class="co">;; =&gt; ([2 3 4 5])</span>
+(run <span class="dv">10</span> [q]
+  (mapo inco [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> q] [<span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])) <span class="co">;; =&gt; (4)</span>
+
+<span class="co">;; FILTER ----------</span>
+
+(<span class="bu">defn</span><span class="fu"> filterf </span>[f coll]
+  (reducef (<span class="kw">fn</span> [coll x] (<span class="kw">if</span> (f x)
+                          (<span class="kw">conj</span> coll x)
+                          coll))
+           []
+           coll))
+
+(filterf <span class="kw">even?</span> (<span class="kw">range</span> <span class="dv">10</span>)) <span class="co">;; =&gt; [0 2 4 6 8]</span>
+
+(<span class="bu">defprotocol</span><span class="fu"> Filtero</span>
+  (filtero-helper [coll relo answer]))
+(<span class="kw">extend-protocol</span> Filtero
+    clojure.lang.PersistentVector
+    (filtero-helper [coll relo answer]
+      (reduceo (<span class="kw">fn</span> [coll x new-coll]
+                 (condu
+                  [(relo x)
+                   (conjo coll x new-coll)]
+                  [(<span class="kw">==</span> coll new-coll)]))
+               [] coll answer)))
+(<span class="bu">defn</span><span class="fu"> filtero </span>[relo coll answer]
+  (filtero-helper coll relo answer))
+
+(run <span class="dv">10</span> [q]
+  (filtero eveno [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span>] q)) <span class="co">;; ([2 4 6])</span>
+
+      
+<span class="co">;; That Cool example ----------</span>
+<span class="co">;;   notice that to help out `run`, I constrain </span>
+<span class="co">;;   my answer-space a bit</span>
+
+(run <span class="dv">10</span> [q]
+  <span class="co">;; constrain the answers to lists of length 2 or 3</span>
+  <span class="co">;; and ints of range 0-1000</span>
+  (fresh [x y z]
+    (conde [(<span class="kw">==</span> q [x y])]
+           [(<span class="kw">==</span> q [x y z])])
+    (fd/in x y z (fd/interval <span class="dv">0</span> <span class="dv">1000</span>)))
+
+  <span class="co">;; find all lists that sum to 42 and multiply to 152</span>
+  (reduceo fd/+ <span class="dv">0</span> q <span class="dv">42</span>)
+  (reduceo fd/* <span class="dv">1</span> q <span class="dv">152</span>))</code></pre></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>

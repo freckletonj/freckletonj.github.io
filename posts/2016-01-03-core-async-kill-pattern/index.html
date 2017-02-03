@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Core.Async | The Kill Pattern | growmobily</title>
+
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
+        <!------ Bootstrap ----->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <!------ FontAwesome ----->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    </head>
+    
+    <body>
+
+        <div class="banner"></div>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2">
+                    <div id="content">
+                        <h1>Core.Async | The Kill Pattern</h1>
+<div class="info">
+    Posted on January  3, 2016
+    
+        by Josh
+    
+</div>
+
+<p>You’ll find, at times, that you have a long-running channel which you need to respond to a kill signal. I first needed this to perform graceful shutdowns with a <a href="https://github.com/stuartsierra/component">Component</a> workflow.</p>
+<p>A program’s worth a thousand words, so I’ll just let you play with the following code. I commented it pretty thoroughly.</p>
+<div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> clj-scratch.core-async
+  (<span class="at">:require</span> [clojure.core.async <span class="at">:refer</span> [&lt;! &lt;!!
+                                        &gt;! &gt;!!
+                                        alt! alt!! alts! alts!!
+                                        chan go timeout close!]
+             <span class="at">:as</span> a]))
+
+<span class="co">;; setup channels ----------</span>
+
+(<span class="bu">def</span><span class="fu"> a&gt; </span>(chan <span class="dv">3</span>)) <span class="co">; notice, when `a&gt;` has more than 3 items on it,</span>
+                  <span class="co">; future puts don't fail, they just pause and wait</span>
+                  <span class="co">; for room on the channel</span>
+                  
+(<span class="bu">def</span><span class="fu"> kill&gt; </span>(chan)) <span class="co">; when `kill&gt;` recieves a signal, the following go</span>
+                   <span class="co">; loop recognizes it and ceases pulling</span>
+
+<span class="co">;; take from channels ----------</span>
+
+(go (<span class="kw">loop</span> [coll (alts! [kill&gt; a&gt;] <span class="at">:priority</span> true)]
+      (<span class="kw">let</span> [[x ch] coll]
+        (<span class="kw">cond</span>
+          (<span class="kw">=</span> ch kill&gt;) (<span class="kw">println</span> <span class="st">&quot;kill signal recieved&quot;</span>)
+          (<span class="kw">nil?</span> x)     (<span class="kw">println</span> <span class="st">&quot;a&gt; closed&quot;</span>)
+          <span class="at">:else</span>        (<span class="kw">do</span> (<span class="kw">println</span> <span class="st">&quot;val: &quot;</span> x)
+                           (&lt;! (timeout <span class="dv">100</span>)) <span class="co">; slow down takes</span>
+                           (<span class="kw">recur</span> (alts! [kill&gt; a&gt;] <span class="at">:priority</span> true)))))))
+<span class="co">;; put on `a&gt;` ----------</span>
+
+(go (<span class="kw">loop</span> []
+      (<span class="kw">when</span> (&gt;! a&gt;  (<span class="kw">rand</span> <span class="dv">100</span>)) <span class="co">; this `when` pattern allows failed</span>
+                                <span class="co">; puts to cause the loop to end</span>
+        (&lt;! (timeout <span class="dv">500</span>))              <span class="co">; slow down puts</span>
+        (<span class="kw">recur</span>)))
+    (<span class="kw">println</span> <span class="st">&quot;can't put on closed channel&quot;</span>))
+
+<span class="co">;; killing and closing `a&gt;`----------</span>
+
+(<span class="kw">comment</span>
+  <span class="co">;;;; try these ways of killing the process</span>
+
+  <span class="co">;; send the kill signal. </span>
+  <span class="co">;; Try putting on a few, they'll still be sitting on</span>
+  <span class="co">;; the `kill&gt;` channel if you try to start another take loop</span>
+  (go (&gt;! kill&gt; <span class="at">:this-can-be-any-value</span>))
+
+  <span class="co">;; note, `a&gt;` is still alive, and can be put on, and taken from. Try</span>
+  <span class="co">;; the following line, or go start another taking go loop</span>
+  (go (<span class="kw">println</span> <span class="st">&quot;new taker: &quot;</span> (&lt;! a&gt;)))
+
+  <span class="co">;; or just `close!` it for good</span>
+  (close! a&gt;))</code></pre></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
