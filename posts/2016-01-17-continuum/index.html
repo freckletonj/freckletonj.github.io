@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Continuum | ? | growmobily</title>
+        <title>Continuum | Unified Programming | The Gentleman Programmer</title>
         <link rel="shortcut icon" href="../../img/favicon.ico" />
 
         <!------ Bootstrap ----->
@@ -41,60 +41,63 @@
             <a href="../../">
                 <img class="beard" type="image/svg+xml" src="../../img/beard.svg" />
             </a>
-            
         </div>
     </div>
-
 </div>
+<br />
 
 
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
                     <div id="content">
-                        <h1>Continuum | ?</h1>
-<div class="info">
+                        <h1 class="text-center">Continuum | Unified Programming</h1>
+<div class="info text-center">
     Posted on January 17, 2016
     
         by Josh
     
 </div>
-
+<hr />
+<blockquote>
+<p>Imagine if an architect’s blueprint automatically generated a building for free. I want that, for programmers.</p>
+</blockquote>
 <h1 id="groundhogs-day">Groundhog’s Day</h1>
 <p>At a sufficiently high level of abstraction, every piece of software ever crafted looks sufficiently identical. I believe in categorizing things into <a href="TODO">human-mind-sized</a> chunks, and at my chosen level of abstraction, all software are tools for solving problems and all tools do just two things:</p>
 <ol style="list-style-type: decimal">
-<li>Provide resources to the user</li>
-<li>Allow the user to manipulate the world</li>
+<li>Provide resources to the user, especially data</li>
+<li>Empower the user to manipulate the world</li>
 </ol>
 <p>(and in the context of problems that software is good at solving, providing and manipulating information. Also, as a complete aside, go one level higher, and all problems become simply <a href="TODO">creating human value</a>)</p>
-<p>What this means is that at the core of every piece of software you, or your company, has written, you’re only doing two things. Just two. Regardless of the technology stack, problem domain, or budget behind a solution, the solution will <em>always</em> 1. provide resources, and 2. provide a tool for changing the world. Maybe you can look at these two things as providing <em>inputs</em> to a human, and doing something with their <em>outputs</em>.</p>
+<p>What this means is that at the core of every piece of software you, or your company, has written, you’re only doing two things. Just two. Regardless of the technology stack, problem domain, or budget behind a solution, the solution will <em>always</em> 1. provide resources, and 2. provide a tool for changing the world. Maybe you can look at these two things as providing <em>inputs</em> to a human, and amplifying their <em>outputs</em>.</p>
 <p>I started realizing this early on in my programming career, as I was writing stuff in Python, JS, and eventually Clojure and Haskell. No matter who’s project I was working on, I was doing the same things! I felt like a plumber. Working in houses that superficially looked different, but ultimately I was making sure that the house had sufficent input of some things, and collecting their outputs, (and hopefully not mixing them up). People pay me to architect big beautiful complex weaves of pipes to solve some problem, and yet I spend most of my time joining PVC, and figuring out why the heck this pipe isn’t passing water where I’d intended it to.</p>
-<p>Every day, and every line of code, felt somehow the same.</p>
+<p>Every day, and every line of code, felt somehow the same - like I was always repeating myself.</p>
 <h1 id="the-opportunity">The Opportunity</h1>
-<p>Given a map of the plumbing, if laying the pipe is fairly straightforward, then a developer should not lay that pipe herself.</p>
+<p>A developer should not lay that piping/wiring herself, in the same way that a doctor isn’t needed to administer every shot.</p>
 <ol style="list-style-type: decimal">
 <li>That developer’s time is expensive. (<a href="TODO">Do Not Repeat Yourself</a>)</li>
-<li>Maintaining that code may be more expensive. (<a href="TODO">code is a liability</a>)</li>
+<li>Maintaining/growing ad hoc code is more expensive. (<a href="TODO">code is a liability</a>)</li>
 <li>Hand-written code tends to have issues that weren’t obvious at development time, and <a href="TODO">bugs multiply</a>.</li>
 </ol>
 <p>Seeing this birds-eye view of what code really does allows a motivated individual to design a general solution to the problem; a solution which can hopefully make math-backed guarantees and obviate the risk of hand-written pieces, which frees developers up to design just the high level, value-generating pieces of the solution, and allows them to iterate on those designs faster.</p>
+<p>Imagine if an architect’s blueprint automatically generated a building for free. I want that, for programmers.</p>
 <h1 id="what-a-solution-needs">What a Solution Needs</h1>
 <h2 id="plumbing-the-truth">Plumbing the Truth</h2>
-<p>In software, if something is <a href="TODO">True</a> I would like it to be true all over. If my database says a user’s name is “Pedro”, I want to make sure that Pedro’s account says the same thing. And if Pedro changes his name, I want to make sure that all devices he’s logged in through reflect it. Managing just this simple feature is actually an developer-intensive process. And changing the solution to fit new requirements is equally intensive.</p>
+<p>In software, if something is <a href="TODO">True</a> I would like it to be true all over. If my database says a user’s name is “Pedro”, I want to make sure that Pedro’s account says the same thing. And if Pedro changes his name, I want to make sure that all devices he’s logged in through reflect it. Managing just this simple feature is actually a developer-intensive process. And changing the solution to fit new requirements is equally intensive.</p>
 <p>To solve this, I am looking to <a href="TODO">CRDT</a>s as a way of saying that Truth exists, even if it hasn’t propogated to the database, or the client yet.</p>
-<h1 id="do-not-repeat-yourself">Do Not Repeat Yourself</h1>
+<h2 id="do-not-repeat-yourself">Do Not Repeat Yourself</h2>
 <p>In order for the truth to propogate through your service, plumbing needs to exist between a database, possibly a server, and then all clients that need a given piece of data. The following examples of the requisite glue code are meant to bore you into craving a solution. Feel free to skip over them, but perhaps notice that each block of code is a different way of expressing “here’s how you get my name”, and “here’s how you change it”.</p>
 <p>Manipulating a database looks like this:</p>
 <div class="sourceCode"><pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">SELECT</span> name <span class="kw">FROM</span> <span class="fu">user</span>
 <span class="kw">UPDATE</span> <span class="fu">user</span> <span class="kw">SET</span> name=...</code></pre></div>
-<p>Working with the database on the server might look like (<a href="TODO">YeSQL</a>):</p>
+<p>Working with the database on the server might look like (<a href="https://github.com/krisajenkins/yesql">YeSQL</a>):</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">fn</span> select-user [user-id db] (sql-user-select {<span class="at">:id</span> user-id} db))
 (<span class="kw">fn</span> update-user [user-id new-user db] (sql-user-update ... db))</code></pre></div>
-<p>Offering an API endpoint from the server would be (<a href="TODO">Compojure</a>):</p>
+<p>Offering an API endpoint from the server would be (<a href="https://github.com/weavejester/compojure">Compojure</a>):</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(defroutes app
   (GET <span class="st">&quot;/user/:id&quot;</span> ...)
   (PUT <span class="st">&quot;/user/:id&quot;</span> ...)</code></pre></div>
-<p>Consuming an API endpoint from the browser (<a href="TODO">clj-http</a>):</p>
+<p>Consuming an API endpoint from the browser (<a href="https://github.com/dakrone/clj-http">clj-http</a>):</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(client/get <span class="st">&quot;.../user&quot;</span>)
 (client/put <span class="st">&quot;.../user&quot;</span>)</code></pre></div>
 <p>Then you’d store that data in, say, a clojure map:</p>
@@ -108,13 +111,22 @@
       [<span class="at">:button</span> {<span class="at">:click</span> (<span class="kw">fn</span> [] (dispatch ...))}
         <span class="st">&quot;Update your name&quot;</span>]]))</code></pre></div>
 <p>Gah! That’s a lot of plumbing. And now imagine you want to add a piece of data, or change this bit of plumbing. Nightmares ensue.</p>
-<h1 id="the-silhouette-of-a-solution-an-analogy">The Silhouette of a Solution: An Analogy</h1>
-<p><strong>TL;DR</strong> There are many convergent thoughts from physics, math, information theory, and computer science, that lead to what I expect to be a fantastic solution to generalizing computation yet again and solving this plumbing issue. Forgive that this idea hasn’t finished crystallizing, and expect something great when it does.</p>
-<p>At the most fundamental level, the truths of reality and all therein contained decompose to <a href="TODO">causality</a>. Causality describes states of the world, and changes that happen given certain configurations. Said in other words, causality is about data, and changes on that data. To me, that looks like information, and manipulating information - the main thrust of what software is about.</p>
-<p>I choose to take a page from nature, and implement that generality to solve my plumbing issues. To do so, I will call on the well-defined objects from Category Theory: Data, and it’s <a href="TODO%20wiki">dual</a> CoData. Effects can be seen as “the state of the world”, and CoEffects are roughly a stream of updates.</p>
-<p>I see an entertaining, and possibly useful, parallel with quantum physics here, in that particles moving forward in time are equivalent to anti-particles moving backwards through time. Space happens in time. Data happens within a CoData context, and you can run the whole thing backwards. CoData backwards starts to look like Data.</p>
-<p>(Since I’m still learning, I’m shooting from the hip here, in making this analogy, so to category theorists, quantum physics, and everyone with a rigorous academic background: please correct my crazy assertations)</p>
-<h1 id="section"></h1>
+<h1 id="conclusion">Conclusion</h1>
+<p>Leaving at the bleeding edge of computer science and mathematics are some ideas that I think will evolve into the solution for this problem.</p>
+<p>I’m commited to solving it! And if you have any awesome ideas, or know of anyone else working on something else similar, please let me know!</p>
+<!--
+# The Silhouette of a Solution: An Analogy
+
+**TL;DR** There are many convergent thoughts from physics, math, information theory, and computer science, that lead to what I expect to be a fantastic solution to generalizing computation yet again and solving this plumbing issue. Forgive that this idea hasn't finished crystallizing, and expect something great when it does.
+
+At the most fundamental level, the truths of reality and all therein contained decompose to [causality](TODO). Causality describes states of the world, and changes that happen given certain configurations. Said in other words, causality is about data, and changes on that data. To me, that looks like information, and manipulating information - the main thrust of what software is about.
+
+I choose to take a page from nature, and implement that generality to solve my plumbing issues. To do so, I will call on the well-defined objects from Category Theory: Data, and it's [dual](https://en.wikipedia.org/wiki/Dual_(category_theory)) CoData. Effects can be seen as "the state of the world", and CoEffects are roughly a stream of updates. 
+
+I see an entertaining, and possibly useful, parallel with quantum physics here, in that particles moving forward in time are equivalent to anti-particles moving backwards through time. Space happens in time. Data happens within a CoData context, and you can run the whole thing backwards. CoData backwards starts to look like Data.
+
+(Since I'm still learning, I'm shooting from the hip here, in making this analogy, so to category theorists, quantum physics, and everyone with a rigorous academic background: please correct my crazy assertations)
+-->
 
                     </div>
                 </div>

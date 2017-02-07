@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Core.Match | A Simple Example | growmobily</title>
+        <title>Core.Match | Fibonacci in a Few Lines | The Gentleman Programmer</title>
         <link rel="shortcut icon" href="../../img/favicon.ico" />
 
         <!------ Bootstrap ----->
@@ -41,36 +41,33 @@
             <a href="../../">
                 <img class="beard" type="image/svg+xml" src="../../img/beard.svg" />
             </a>
-            
         </div>
     </div>
-
 </div>
+<br />
 
 
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
                     <div id="content">
-                        <h1>Core.Match | A Simple Example</h1>
-<div class="info">
+                        <h1 class="text-center">Core.Match | Fibonacci in a Few Lines</h1>
+<div class="info text-center">
     Posted on January  3, 2016
     
         by Josh
     
 </div>
-
-<h1 id="a-slightly-motivating-example">A Slightly Motivating Example</h1>
+<hr />
+<h1 id="fibonacci-toy-example">Fibonacci Toy Example</h1>
 <p>If you’ve played around with haskell, or other typed “functional” languages, you’ve probably noticed that “pattern matching” plays a prominent role. While clojure has made a tradeoff on the whole typing debate, we can still pattern match!</p>
-<p>Notice how nice it is to not need to do control flow with <code>(if (= x 1) ...)</code>. Sure <code>cond</code> is great, but <code>match</code> diverges in use cases in more complex problems.</p>
+<p>Notice how nice it is to not need to do control flow with <code>(if (= x 1) ...)</code>. Note, <code>cond</code> would be great in this toy example, and match becomes useful in more complex examples.</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="bu">defn</span><span class="fu"> fib </span>[x]
   (match [x]
     [<span class="dv">1</span>] <span class="dv">1</span>
     [_] (<span class="kw">*</span> x (fib (<span class="kw">dec</span> x)))))
 
 (fib <span class="dv">3</span>) <span class="co">;; =&gt; 6</span></code></pre></div>
-<h1 id="seriously-thats-the-end-of-the-post">Seriously, that’s the end of the post?</h1>
-<p>Yes. I’ll try to expand this further later!</p>
 
                     </div>
                 </div>

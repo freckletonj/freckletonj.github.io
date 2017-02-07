@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Core.Async | The Kill Pattern | growmobily</title>
+        <title>Core.Async | The Kill Pattern | The Gentleman Programmer</title>
         <link rel="shortcut icon" href="../../img/favicon.ico" />
 
         <!------ Bootstrap ----->
@@ -41,25 +41,24 @@
             <a href="../../">
                 <img class="beard" type="image/svg+xml" src="../../img/beard.svg" />
             </a>
-            
         </div>
     </div>
-
 </div>
+<br />
 
 
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
                     <div id="content">
-                        <h1>Core.Async | The Kill Pattern</h1>
-<div class="info">
+                        <h1 class="text-center">Core.Async | The Kill Pattern</h1>
+<div class="info text-center">
     Posted on January  3, 2016
     
         by Josh
     
 </div>
-
+<hr />
 <p>You’ll find, at times, that you have a long-running channel which you need to respond to a kill signal. I first needed this to perform graceful shutdowns with a <a href="https://github.com/stuartsierra/component">Component</a> workflow.</p>
 <p>A program’s worth a thousand words, so I’ll just let you play with the following code. I commented it pretty thoroughly.</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">ns</span> clj-scratch.core-async
