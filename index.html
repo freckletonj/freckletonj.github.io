@@ -4,47 +4,61 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Home | growmobily</title>
-
+        <link rel="shortcut icon" href="./img/favicon.ico" />
 
         <!------ Bootstrap ----->
-        <!-- theme from: https://bootswatch.com/ -->
-        <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
-                
+        
         <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
              rel="stylesheet"
              integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
              crossorigin="anonymous">
              <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
              integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-             crossorigin="anonymous"></script> -->
+             crossorigin="anonymous"></script>
+           -->
+        
+        <!-- theme from: https://bootswatch.com/ -->
+        <link rel="stylesheet" type="text/css" href="./css/bootstrap.css" />
 
+        
         <!------ FontAwesome ----->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
         <!-- My CSS -->
-        <link rel="stylesheet" type="text/css" href="./css/default.css" />
         <link rel="stylesheet" type="text/css" href="./css/syntax.css" />
-
+        <link rel="stylesheet" type="text/css" href="./css/default.css" />
     </head>
     
     <body>
 
         <div class="banner"></div>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
 
-<h1 class="text-center">
-    <a class="head-title" href="./">
-        Josh Freckleton
-    </a>
-</h1>
+            <!-- NOTE: edit colors directly in the svg's style tag -->
+            <a href="./">
+                <img class="beard" type="image/svg+xml" src="./img/beard.svg" />
+            </a>
+            
+        </div>
+    </div>
 
-<!-- <img src="/images/haskell-logo.png" style="float: right; margin: 10px;" /> -->
+</div>
 
 
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
                     <div id="content">
-                        <ul class="no-bullet">
+                        <h1 class="text-center">
+    <a class="head-title" href="./">
+        Josh Freckleton
+    </a>
+</h1>
+
+<ul class="no-bullet">
     
     <li>
         <h4 class="text-center">
@@ -60,76 +74,88 @@
     <p class="text-center">
         <a href>Github</a>
         .
-        <a href>Twitter</a>
-        .
         <a href>RSS</a>
+        .
+        <a href="./archive">All Posts</a>
     </p>
 </small>
 
 
-<ul>
+<ul class="no-bullet">
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-17-continuum/">
-                <h3>Continuum | ?</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-17-continuum/">
+                    Continuum | ?
+                </a>
+            </h3>
             <small>January 17, 2016</small>
             <p></p>
         </div>
     </li>
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-03-transducers/">
-                <h3>Transducers</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-03-transducers/">
+                    Transducers
+                </a>
+            </h3>
             <small>January  3, 2016</small>
             <p>`Reduce` is a workhorse in functional programming, and transducers introduce the pattern for composing them.</p>
         </div>
     </li>
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-03-core-match/">
-                <h3>Core.Match | A Simple Example</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-03-core-match/">
+                    Core.Match | A Simple Example
+                </a>
+            </h3>
             <small>January  3, 2016</small>
             <p></p>
         </div>
     </li>
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-03-core-logic-functional-patterns/">
-                <h3>Core.Logic | Functional Patterns in a Logic Language</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-03-core-logic-functional-patterns/">
+                    Core.Logic | Functional Patterns in a Logic Language
+                </a>
+            </h3>
             <small>January  3, 2016</small>
             <p></p>
         </div>
     </li>
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-03-core-async-kill-pattern/">
-                <h3>Core.Async | The Kill Pattern</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-03-core-async-kill-pattern/">
+                    Core.Async | The Kill Pattern
+                </a>
+            </h3>
             <small>January  3, 2016</small>
             <p></p>
         </div>
     </li>
     
     <hr class="style">
-    <li class="no-bullet">
+    <li>
         <div class="row">
-            <a href="./posts/2016-01-03-clojure-tinker/">
-                <h3>Clojure Tinker | A Place to Play With New Libs, and New Ideas</h3>
-            </a>
+            <h3>
+                <a href="./posts/2016-01-03-clojure-tinker/">
+                    Clojure Tinker | A Place to Play With New Libs, and New Ideas
+                </a>
+            </h3>
             <small>January  3, 2016</small>
             <p></p>
         </div>
