@@ -5,20 +5,39 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Transducers | growmobily</title>
 
-        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
-        <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
 
         <!------ Bootstrap ----->
-        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <!-- theme from: https://bootswatch.com/ -->
+        <link rel="stylesheet" type="text/css" href="../../css/bootstrap.css" />
+                
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+             rel="stylesheet"
+             integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+             crossorigin="anonymous">
+             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+             crossorigin="anonymous"></script> -->
 
         <!------ FontAwesome ----->
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+        <!-- My CSS -->
+        <link rel="stylesheet" type="text/css" href="../../css/default.css" />
+        <link rel="stylesheet" type="text/css" href="../../css/syntax.css" />
+
     </head>
     
     <body>
 
         <div class="banner"></div>
+
+<h1 class="text-center">
+    <a class="head-title" href="../../">
+        Josh Freckleton
+    </a>
+</h1>
+
+<!-- <img src="/images/haskell-logo.png" style="float: right; margin: 10px;" /> -->
 
 
         <div class="container">
@@ -47,9 +66,10 @@
 <p>Examples of reducing fns:</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">conj</span> [<span class="dv">1</span> <span class="dv">2</span>] <span class="dv">3</span>) <span class="co">;; =&gt; [1 2 3]</span>
 (<span class="kw">str</span> <span class="st">&quot;accumulating string, &quot;</span> <span class="st">&quot;new piece&quot;</span>) <span class="co">;; =&gt; &quot;accumulating string, new piece&quot;</span></code></pre></div>
+<p><code>reduce</code> is called <code>fold</code> in haskell, and you’ll see various flavors of <code>fold</code>, but which stay close to these semantics.</p>
 <h1 id="transducers-aka-xforms-or-xfs">Transducers, aka xforms (or <code>xf</code>s)</h1>
 <p>When using reducing functions, it’s often important (in the name of composition!) to be able to manipulate the stuff flowing into our function. I may want to filter it, or apply a fn to it, for example.</p>
-<p>So, there are another class of functions called transducers, which you will see called <code>xform</code>s. Their signature looks like this:</p>
+<p>So, there are another class of functions called transducers, which you will see called <code>xform</code>s, or <code>xf</code>s. Their signature looks like this:</p>
 <div class="sourceCode"><pre class="sourceCode clojure"><code class="sourceCode clojure">(<span class="kw">fn</span> [rf] ...) <span class="co">;; =&gt; new-rf</span></code></pre></div>
 <p>So, <code>xf</code>s manipulate <code>rf</code>s.</p>
 <p>Examples of <code>xform</code>s:</p>
@@ -116,7 +136,7 @@
 <p>eg: <code>(conj) ; =&gt; []</code> <code>(str) ; =&gt; &quot;&quot;</code></p>
 <p>And <code>transduce</code> needs that information, which you can see in <em>it’s</em> 0-arity version which calls <code>(rf)</code></p>
 <h1 id="reference">Reference</h1>
-<p>The following functions are related to transducers, and therefore fun to learn. I leave it as a reference since it frustrated <em>me</em> in the beginning of this academic journey to know what worked with transducers and what didn’t.</p>
+<p>The following functions are related to transducers, and therefore fun to learn. I leave it as a reference since it frustrated <em>me</em> in the beginning of this academic journey to know what worked with transducers and what didn’t. This was my “bingo” card while studying them :)</p>
 <pre><code>cat
 completing
 dedupe
