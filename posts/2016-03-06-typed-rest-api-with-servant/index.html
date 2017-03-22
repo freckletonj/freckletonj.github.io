@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Typed & Authorized REST API with Servant | The Gentleman Programmer</title>
+        <title>Typed & Authorized REST API with Servant: Part 1 | The Gentleman Programmer</title>
         <link rel="shortcut icon" href="../../img/favicon.ico" />
 
         <!------ Bootstrap ----->
@@ -85,7 +85,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2">
                     <div id="content">
-                        <h1 class="text-center">Typed & Authorized REST API with Servant</h1>
+                        <h1 class="text-center">Typed & Authorized REST API with Servant: Part 1</h1>
 <div class="info text-center">
     Posted on March  6, 2016
     
@@ -93,11 +93,14 @@
 <hr />
 <h2 id="tldr">TL;DR</h2>
 <p>Here is my attempt to build a simple authorized clockin/clockout time-logger using Servant for the backend. The <a href="https://haskell-servant.github.io/">Servant</a> website offers some great tutorials, but in this post I offer my explanations and solutions to problems that I think anyone building with Servant will run into that perhaps aren’t properly addressed elsewhere.</p>
+<p>See the end product on <a href="https://github.com/freckletonj/timetrack-servant">github</a>.</p>
 <h2 id="motivation">Motivation</h2>
 <p>I recently wanted to build a demo app using Haskell, and was faced with problem of choosing what stack of libraries to use. There are <a href="https://wiki.haskell.org/Web/Frameworks">a lot</a> to choose from.</p>
 <p><a href="http://www.yesodweb.com/">Yesod</a> came highly recommended at <a href="http://www.reddit.com/r/haskell">/r/haskell</a>, and after giving it a solid run, and a couple weeks’ effort, I found it was a bit too opinionated for me. Part of what I love about Haskell is solving problems by composing lower-level pieces in a modular way, but Yesod is a bit too opinionated for me.</p>
 <p>I tried a few other of the most common <a href="https://wiki.haskell.org/Web/Frameworks">options</a>, and while many of them felt like they were straight ports of other notable imperative web frameworks, one stood out against the rest.</p>
-<p><a href="https://haskell-servant.github.io/">Servant</a>.</p>
+<h2 id="disclaimer">Disclaimer</h2>
+<p>I made this post for my own benefit, as a way of dumping my thoughts into text. As such, it is lacking a level of polish. (read: any level of polish ;) )</p>
+<p>I hope to clean it up sometime when it’s design settles, and I am able to formulate it into prettier little value bombs.</p>
 <h1 id="mvp-simple-servant-app">1. MVP, simple servant app</h1>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE DataKinds       #-}</span>
 <span class="ot">{-# LANGUAGE TemplateHaskell #-}</span>
@@ -143,7 +146,7 @@ app <span class="fu">=</span> serve api server
 
 <span class="ot">startApp ::</span> <span class="dt">IO</span> ()
 startApp <span class="fu">=</span> run <span class="dv">8080</span> app</code></pre></div>
-<p>visit: <code>http://localhost:8080/times</code> response: a list of times</p>
+<p>visit: <code>http://localhost:8080/times</code></p>
 <h1 id="capturing-url-vars">2. Capturing URL Vars</h1>
 <p>You can capture a variable from the client-requested URI using Servant’s <code>Capture</code>. Notice that a <code>Capture</code> is part of the type level DSL, and then the <code>server</code>’s endpoint is supplied with a function that takes the captured value.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">API</span> <span class="fu">=</span> <span class="st">&quot;times&quot;</span> <span class="fu">:&gt;</span> <span class="dt">Get</span> <span class="ch">'[JSON] [TimeEntry]</span>
@@ -336,7 +339,7 @@ protected _ <span class="fu">=</span> throwAll err401</code></pre></div>
 <span class="ot">unprotected ::</span> <span class="dt">CookieSettings</span> <span class="ot">-&gt;</span> <span class="dt">JWTSettings</span> <span class="ot">-&gt;</span> <span class="dt">Server</span> <span class="dt">Unprotected</span>
 unprotected cs jwts <span class="fu">=</span> checkCreds cs jwts
                  <span class="fu">:&lt;|&gt;</span> serveDirectory <span class="st">&quot;example/static&quot;</span> </code></pre></div>
-<h1 id="conclusion">10. Conclusion</h1>
+<h1 id="conclusion">Conclusion</h1>
 <p>This post is a bit of a dump of all of the things I’ve learned so far. I kind of prefer posts that are high-content low fluff, so forgive if I under explained anything.</p>
 <p>In a future post I may include things like</p>
 <ul>
@@ -345,7 +348,7 @@ unprotected cs jwts <span class="fu">=</span> checkCreds cs jwts
 <li>adding user roles to the authorization workflow</li>
 <li>and how to create users that can be authenticated in the first place.</li>
 </ul>
-<p>And here’s the finished product so far! Note that the protected routes need a header like: <code>&quot;Authorization Bearer &quot;eyJhb...&quot;</code> that contain a valid token for the keys of that session.r</p>
+<p>And here’s the finished product so far! Note that the protected routes need a header like: <code>&quot;Authorization Bearer &quot;eyJhb...&quot;</code> that contain a valid token for the keys of that session.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">{-# LANGUAGE DataKinds         #-}</span>
 <span class="ot">{-# LANGUAGE DeriveFunctor     #-}</span>
 <span class="ot">{-# LANGUAGE DeriveGeneric     #-}</span>
